@@ -2,19 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>English Level Assessment</title>
     <link rel="dns-prefetch" href="//www.videoask.com">
     <style>
-        /* Base Styles - Keeping your original look exactly as it is */
-        body, html { margin: 0; padding: 0; height: 100%; background-color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
+        /* Base Styles - Pure Branding */
+        body, html { margin: 0; padding: 0; height: 100%; background-color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; overflow: hidden; }
         
         .container { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 15px; box-sizing: border-box; }
         
-        /* Logo: Optimized for 119x50 dimensions */
-        .logo { width: 119px; height: 50px; margin-bottom: 25px; object-fit: contain; }
+        /* Logo: Kept exactly as your current version */
+        .logo { width: 119px; height: 50px; margin-bottom: 25px; object-fit: contain; flex-shrink: 0; }
         
-        /* Box shared by both the Gate and the Video */
+        /* The Container Box for the Interaction */
         .portal-box {
             width: 100%;
             max-width: 400px;
@@ -22,56 +22,42 @@
             position: relative;
         }
 
-        /* The High-Speed Facade */
+        /* The Button Layer (The Gate) */
         #gate { 
             position: absolute;
             top: 0; left: 0;
-            text-align: center; 
-            cursor: pointer; 
-            width: 100%; 
-            height: 100%; 
-            border: 2px solid #379cfb; 
+            width: 100%; height: 100%; 
             background: #fdfdfd; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
+            border: 2px solid #379cfb; 
             border-radius: 24px; 
+            display: flex; align-items: center; justify-content: center; 
+            text-align: center; cursor: pointer;
+            z-index: 10;
             box-shadow: 0 12px 40px rgba(0,0,0,0.08);
-            transition: opacity 0.2s ease;
-            z-index: 2; /* Sits on top */
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* The Video Container sitting underneath */
+        .start-btn { 
+            background: #379cfb; color: white; padding: 16px 32px; border-radius: 12px;
+            font-size: 18px; font-weight: 700; text-transform: uppercase;
+            box-shadow: 0 6px 20px rgba(55, 156, 251, 0.4);
+        }
+
+        /* The Video Container Layer */
         #video-container {
             position: absolute;
             top: 0; left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 24px;
-            overflow: hidden;
+            width: 100%; height: 100%;
+            border-radius: 24px; overflow: hidden;
             background: #000;
-            z-index: 1; /* Sits behind */
+            z-index: 5;
+            display: none; /* Hidden until tap */
         }
-
-        .start-btn { 
-            background: #379cfb; 
-            color: white;
-            padding: 16px 32px;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 700;
-            display: inline-block;
-            box-shadow: 0 6px 20px rgba(55, 156, 251, 0.4);
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        h2 { color: #1a1a1a; font-size: 24px; margin: 10px 0 0 0; font-weight: 800; letter-spacing: -0.5px; }
-        p { color: #666; font-size: 16px; margin-top: 8px; font-weight: 400; }
 
         iframe { width: 100%; height: 100%; border: none; border-radius: 22px; }
+
+        h2 { color: #1a1a1a; font-size: 24px; margin: 15px 0 5px 0; font-weight: 800; }
+        p { color: #666; font-size: 16px; margin: 0; }
     </style>
 </head>
 <body>
@@ -80,7 +66,7 @@
         <img src="https://businessenglishwithvitu.com/wp-content/uploads/2025/12/资源-4.png" alt="Business English with Vitu" class="logo">
 
         <div class="portal-box">
-            <div id="gate">
+            <div id="gate" onclick="runOneClickFlow()">
                 <div>
                     <div class="start-btn">Start English Check</div>
                     <h2>Assessment Portal</h2>
@@ -89,22 +75,28 @@
             </div>
 
             <div id="video-container">
-                <iframe id="va-iframe" src="https://www.videoask.com/fa1w7kdsr?autoplay=1" allow="autoplay; fullscreen; encrypted-media;"></iframe>
+                <iframe id="va-iframe" 
+                    src="https://www.videoask.com/fa1w7kdsr?autoplay=1&m=1" 
+                    allow="autoplay; fullscreen; encrypted-media; camera; microphone;">
+                </iframe>
             </div>
         </div>
     </div>
 
     <script>
-        // Use the click on the "gate" to trigger the transition
-        document.getElementById('gate').addEventListener('click', function() {
-            // Hide the button layer
-            this.style.display = 'none';
-            
-            // Force the video to reload/play now that we have user interaction
+        function runOneClickFlow() {
+            const gate = document.getElementById('gate');
+            const container = document.getElementById('video-container');
             const iframe = document.getElementById('va-iframe');
-            const currentSrc = iframe.src;
-            iframe.src = currentSrc; 
-        });
+
+            // 1. Hide Button, Show Video
+            gate.style.display = 'none';
+            container.style.display = 'block';
+            
+            // 2. Refresh the SRC inside the user-click event to force mobile permission
+            const videoUrl = "https://www.videoask.com/fa1w7kdsr?autoplay=1&m=1";
+            iframe.src = videoUrl;
+        }
     </script>
 
 </body>
